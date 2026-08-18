@@ -1,3 +1,4 @@
+-- w1 task
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name TEXT,
@@ -49,7 +50,7 @@ CREATE TABLE comments (
 );
 
 
-
+--w2 task
 
 ALTER TABLE tasks
 ADD CONSTRAINT tasks_status_check
