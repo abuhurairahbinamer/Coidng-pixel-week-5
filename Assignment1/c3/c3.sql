@@ -171,3 +171,19 @@ INSERT INTO comments (id, task_id, author_id, body) VALUES
 (19, 11, 12, 'Token refresh rotation working smoothly.'),
 (20, 13, 15, 'Docker caching step added to workflow.'),
 (21, 18, 10, 'Figma mockups approved by product lead.');
+
+
+
+SELECT count(*) FROM users;
+
+SELECT count(*) FROM projects;
+
+SELECT count(*) FROM project_members;
+
+SELECT count(*) FROM tags;
+
+SELECT count(*) FROM tasks;
+
+SELECT count(*) FROM task_tags;
+
+SELECT count(*) FROM comments;
