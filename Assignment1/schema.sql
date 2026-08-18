@@ -6,14 +6,14 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name TEXT,
     email TEXT NOT NULL,
-    created_at TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE projects (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     owner_id INTEGER NOT NULL,
-    created_at TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE project_members (
@@ -31,7 +31,7 @@ CREATE TABLE tasks (
     project_id INTEGER NOT NULL,
     assignee_id INTEGER,
     due_date DATE,
-    created_at TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE tags (
@@ -49,7 +49,7 @@ CREATE TABLE comments (
     task_id INTEGER NOT NULL,
     author_id INTEGER NOT NULL,
     body TEXT NOT NULL,
-    created_at TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -152,7 +152,6 @@ PRIMARY KEY (task_id, tag_id);
 
 -- ==================================================================
 -- VERIFICATION & TEST QUERIES
--- (Commented out to allow clean execution of schema.sql from top to bottom)
 -- ==================================================================
 
 -- ------------------------------------------------------------------
@@ -160,13 +159,13 @@ PRIMARY KEY (task_id, tag_id);
 -- ------------------------------------------------------------------
 
 -- Valid Inserts:
--- INSERT INTO users (name, email) VALUES ('Ali', 'ali@test.com');
--- INSERT INTO projects (name, owner_id) VALUES ('Project 1', 1);
--- INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'member');
--- INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 3, 1);
--- INSERT INTO tags (name) VALUES ('javascript');
+INSERT INTO users (name, email) VALUES ('Ali', 'ali@test.com');
+INSERT INTO projects (name, owner_id) VALUES ('Project 1', 1);
+INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'member');
+INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 3, 1);
+INSERT INTO tags (name) VALUES ('javascript');
 
--- Invalid Inserts (Expected to fail):
+-- Invalid Inserts (Commented out because they intentionally fail):
 -- -- Invalid status (fails tasks_status_check):
 -- INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'blocked', 3, 1);
 -- -- Invalid priority (fails tasks_priority_check):
@@ -183,43 +182,48 @@ PRIMARY KEY (task_id, tag_id);
 -- Task C1 Tests: Foreign Key & Cascade Delete Checks
 -- ------------------------------------------------------------------
 
--- 1. Setup Test Data:
--- INSERT INTO users (name, email) VALUES ('Ali', 'ali1@test.com'), ('Ahmed', 'ahmed1@test.com');
--- INSERT INTO projects (name, owner_id) VALUES ('Project 1', 1), ('Project 2', 2);
--- INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'owner'), (2, 2, 'owner');
--- INSERT INTO tasks (title, status, priority, project_id) VALUES ('Task 1', 'todo', 3, 1), ('Task 2', 'in_progress', 4, 1), ('Task 3', 'done', 5, 2);
+-- 1. Setup Test Data for C1 (Users 2 & 3, Projects 2 & 3):
+INSERT INTO users (name, email) VALUES ('User 2', 'ali1@test.com'), ('User 3', 'ahmed1@test.com');
+INSERT INTO projects (name, owner_id) VALUES ('Project 2', 2), ('Project 3', 3);
+INSERT INTO project_members (user_id, project_id, role) VALUES (2, 2, 'owner'), (3, 3, 'owner');
+INSERT INTO tasks (title, status, priority, project_id) VALUES 
+    ('Task 1', 'todo', 3, 2), 
+    ('Task 2', 'in_progress', 4, 2), 
+    ('Task 3', 'done', 5, 3);
 
 -- 2. Inspect Data Before Deletion:
--- SELECT * FROM projects;
--- SELECT * FROM project_members;
--- SELECT id, title, project_id FROM tasks;
+SELECT * FROM projects;
+SELECT * FROM project_members;
+SELECT id, title, project_id FROM tasks;
 
--- 3. Perform Deletion (Test CASCADE on project_members and tasks):
--- DELETE FROM projects WHERE id = 1;
+-- 3. Perform Deletion (Deleting Project 2 cascades to its tasks and members):
+DELETE FROM projects WHERE id = 2;
 
 -- 4. Inspect Data After Deletion:
--- SELECT * FROM projects;
--- SELECT * FROM tasks;
--- SELECT * FROM project_members;
+SELECT * FROM projects;
+SELECT * FROM tasks;
+SELECT * FROM project_members;
 
 
 -- ------------------------------------------------------------------
 -- Task C2 Tests: Composite Primary Key Checks
 -- ------------------------------------------------------------------
 
--- -- Valid Inserts:
--- INSERT INTO projects (name, owner_id) VALUES ('Project 1', 1);
--- INSERT INTO project_members (user_id, project_id, role) VALUES (1, 3, 'member');
--- INSERT INTO project_members (user_id, project_id, role) VALUES (1, 2, 'member');
+-- 1. Valid Composite Key Inserts for project_members:
+INSERT INTO project_members (user_id, project_id, role) VALUES (1, 3, 'member');
+INSERT INTO project_members (user_id, project_id, role) VALUES (2, 3, 'member');
 
--- -- Invalid Insert (Duplicate (user_id, project_id) should fail):
+-- Invalid Composite Key Insert (Duplicate (user_id=1, project_id=3) intentionally fails):
 -- INSERT INTO project_members (user_id, project_id, role) VALUES (1, 3, 'member');
 
--- -- Valid Inserts:
--- INSERT INTO tasks (title, status, priority, project_id) VALUES ('Task for C2', 'todo', 3, 3);
--- INSERT INTO tags (name) VALUES ('C2-tag-1'), ('C2-tag-2');
--- INSERT INTO task_tags (task_id, tag_id) VALUES (4, 1);
+-- 2. Valid Composite Key Inserts for task_tags:
+INSERT INTO tags (name) VALUES ('C2-tag-1'), ('C2-tag-2');
+INSERT INTO task_tags (task_id, tag_id) VALUES (4, 2);
+INSERT INTO task_tags (task_id, tag_id) VALUES (4, 3);
+
+-- Invalid Composite Key Insert (Duplicate (task_id=4, tag_id=2) intentionally fails):
 -- INSERT INTO task_tags (task_id, tag_id) VALUES (4, 2);
 
--- -- Invalid Insert (Duplicate (task_id, tag_id) should fail):
--- INSERT INTO task_tags (task_id, tag_id) VALUES (4, 1);
+-- 3. Final verification of composite junction tables:
+SELECT * FROM project_members;
+SELECT * FROM task_tags;

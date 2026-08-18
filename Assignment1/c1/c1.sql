@@ -55,45 +55,37 @@ ON DELETE RESTRICT;
 
 
 
---check
-INSERT INTO users (name, email)
-VALUES
-('Ali', 'ali1@test.com'),
-('Ahmed', 'ahmed1@test.com');
+-- ------------------------------------------------------------------
+-- Verification / Test Queries
+-- ------------------------------------------------------------------
 
-INSERT INTO projects (name, owner_id)
-VALUES
-('Project 1', 1),
-('Project 2', 2);
+-- 1. Setup Test Data:
+INSERT INTO users (name, email) VALUES 
+    ('Ali', 'ali1@test.com'), 
+    ('Ahmed', 'ahmed1@test.com');
 
+INSERT INTO projects (name, owner_id) VALUES 
+    ('Project 1', 1), 
+    ('Project 2', 2);
 
-INSERT INTO project_members (user_id, project_id, role)
-VALUES
-(1, 1, 'owner'),
-(2, 2, 'owner');
+INSERT INTO project_members (user_id, project_id, role) VALUES 
+    (1, 1, 'owner'), 
+    (2, 2, 'owner');
 
+INSERT INTO tasks (title, status, priority, project_id) VALUES 
+    ('Task 1', 'todo', 3, 1), 
+    ('Task 2', 'in_progress', 4, 1), 
+    ('Task 3', 'done', 5, 2);
 
-INSERT INTO tasks (title, status, priority, project_id)
-VALUES
-('Task 1', 'todo', 3, 1),
-('Task 2', 'in_progress', 4, 1),
-('Task 3', 'done', 5, 2);
-
---check data before deleting
-
+-- 2. Inspect Data Before Deletion:
 SELECT * FROM projects;
-
 SELECT * FROM project_members;
-
 SELECT id, title, project_id FROM tasks;
 
-DELETE FROM projects
-WHERE id = 1;
+-- 3. Perform Deletion (Deleting Project 1 cascades to its tasks and members):
+DELETE FROM projects WHERE id = 1;
 
--- check after delete
-
+-- 4. Inspect Data After Deletion:
 SELECT * FROM projects;
-
 SELECT * FROM tasks;
-
 SELECT * FROM project_members;

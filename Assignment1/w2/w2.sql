@@ -19,35 +19,25 @@ ADD CONSTRAINT tags_name_unique
 UNIQUE (name);
 
 
+-- ------------------------------------------------------------------
+-- Verification / Test Queries
+-- ------------------------------------------------------------------
 
--- -- valid checks
--- for status
-INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 3, 1);
--- for priority
-INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 3, 1);
--- for role
-INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'member');
--- for email
+-- Valid Inserts:
 INSERT INTO users (name, email) VALUES ('Ali', 'ali@test.com');
-
-
-
-
--- -- invalid checks
--- for status
-INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'blocked', 3, 1);
---  for priority
-INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 9, 1);
--- for role
-INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'boss');
--- for email
-INSERT INTO users (name, email) VALUES ('Ahmed', 'ali@test.com');
-
-
-
-
-
--- -- -- check duplicate tag
+INSERT INTO projects (name, owner_id) VALUES ('Project 1', 1);
+INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'member');
+INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 3, 1);
 INSERT INTO tags (name) VALUES ('javascript');
--- the second tag should be rejected
-INSERT INTO tags (name) VALUES ('javascript');
+
+-- Invalid Inserts (Commented out because they intentionally fail):
+-- -- Invalid status (fails tasks_status_check):
+-- INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'blocked', 3, 1);
+-- -- Invalid priority (fails tasks_priority_check):
+-- INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 9, 1);
+-- -- Invalid role (fails project_members_role_check):
+-- INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'boss');
+-- -- Duplicate email (fails users_email_unique):
+-- INSERT INTO users (name, email) VALUES ('Ahmed', 'ali@test.com');
+-- -- Duplicate tag (fails tags_name_unique):
+-- INSERT INTO tags (name) VALUES ('javascript');
