@@ -162,7 +162,7 @@ PRIMARY KEY (task_id, tag_id);
 INSERT INTO users (name, email) VALUES ('Ali', 'ali@test.com');
 INSERT INTO projects (name, owner_id) VALUES ('Project 1', 1);
 INSERT INTO project_members (user_id, project_id, role) VALUES (1, 1, 'member');
-INSERT INTO tasks (title, status, priority, project_id) VALUES ('Test task', 'todo', 3, 1);
+INSERT INTO tasks (title, status, priority, project_id,assignee_id) VALUES ('Test task', 'todo', 3, 1,1);
 INSERT INTO tags (name) VALUES ('javascript');
 
 -- Invalid Inserts (Commented out because they intentionally fail):
@@ -186,23 +186,23 @@ INSERT INTO tags (name) VALUES ('javascript');
 INSERT INTO users (name, email) VALUES ('User 2', 'ali1@test.com'), ('User 3', 'ahmed1@test.com');
 INSERT INTO projects (name, owner_id) VALUES ('Project 2', 2), ('Project 3', 3);
 INSERT INTO project_members (user_id, project_id, role) VALUES (2, 2, 'owner'), (3, 3, 'owner');
-INSERT INTO tasks (title, status, priority, project_id) VALUES 
-    ('Task 1', 'todo', 3, 2), 
-    ('Task 2', 'in_progress', 4, 2), 
-    ('Task 3', 'done', 5, 3);
+INSERT INTO tasks (title, status, priority, project_id,assignee_id) VALUES 
+    ('Task 1', 'todo', 3, 2, 1), 
+    ('Task 2', 'in_progress', 4, 2, 2), 
+    ('Task 3', 'done', 5, 3, 3);
 
 -- 2. Inspect Data Before Deletion:
-SELECT * FROM projects;
-SELECT * FROM project_members;
-SELECT id, title, project_id FROM tasks;
+-- SELECT * FROM projects;
+-- SELECT * FROM project_members;
+-- SELECT id, title, project_id FROM tasks;
 
 -- 3. Perform Deletion (Deleting Project 2 cascades to its tasks and members):
-DELETE FROM projects WHERE id = 2;
+-- DELETE FROM projects WHERE id = 2;
 
--- 4. Inspect Data After Deletion:
-SELECT * FROM projects;
-SELECT * FROM tasks;
-SELECT * FROM project_members;
+-- -- 4. Inspect Data After Deletion:
+-- SELECT * FROM projects;
+-- SELECT * FROM tasks;
+-- SELECT * FROM project_members;
 
 
 -- ------------------------------------------------------------------

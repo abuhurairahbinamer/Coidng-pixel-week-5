@@ -187,3 +187,14 @@ SELECT count(*) FROM tasks;
 SELECT count(*) FROM task_tags;
 
 SELECT count(*) FROM comments;
+-- 1. Unassigned tasks
+SELECT count(*) AS unassigned_tasks FROM tasks WHERE assignee_id IS NULL;
+
+-- 2. Overdue non-done tasks
+SELECT count(*) AS overdue_tasks FROM tasks WHERE due_date < CURRENT_DATE AND status <> 'done';
+
+-- 3. Projects with 0 tasks
+SELECT p.id, p.name FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE t.id IS NULL;
+
+-- 4. Users with 0 tasks
+SELECT u.id, u.name FROM users u LEFT JOIN tasks t ON t.assignee_id = u.id WHERE t.id IS NULL;
