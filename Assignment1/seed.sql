@@ -79,17 +79,17 @@ INSERT INTO tasks (id, title, description, status, priority, project_id, assigne
 (16, 'Optimize heavy search queries', 'Add composite indexes on tasks table', 'todo', 4, 10, 13, CURRENT_DATE - INTERVAL '5 days'), -- Overdue
 (17, 'Create onboarding walkthrough', 'Interactive UI tutorial for new team members', 'todo', 2, 10, NULL, NULL), -- Unassigned & NULL due date
 (18, 'Design settings page', 'Dark mode toggle and notification preferences', 'in_progress', 3, 10, 12, CURRENT_DATE + INTERVAL '5 days'),
+(19, 'Implement push notifications', 'Setup FCM for iOS and Android devices', 'done', 4, 10, 12, CURRENT_DATE - INTERVAL '6 days'),
 
 -- Beta Mobile App (Project 11) Tasks:
-(19, 'Implement push notifications', 'Setup FCM for iOS and Android devices', 'done', 4, 11, 12, CURRENT_DATE - INTERVAL '6 days'),
 (20, 'Redesign profile screen', 'Modernize layout and add avatar cropper', 'in_progress', 2, 11, 14, CURRENT_DATE + INTERVAL '3 days'),
 (21, 'Fix Bluetooth sync bug', 'Resolve connection drops in background mode', 'todo', 5, 11, 14, CURRENT_DATE - INTERVAL '2 days'), -- Overdue
 (22, 'Add biometrics login', 'FaceID and fingerprint biometric authentication', 'todo', 3, 11, NULL, CURRENT_DATE + INTERVAL '10 days'), -- Unassigned
 (23, 'Refactor state management', 'Migrate state management to lightweight store', 'in_progress', 3, 11, 15, NULL), -- NULL due date
 
 -- Gamma Analytics (Project 12) Tasks:
-(24, 'Build export to CSV feature', 'Stream large dataset exports without timeout', 'done', 4, 12, 15, CURRENT_DATE - INTERVAL '1 day'),
-(25, 'Setup Prometheus metrics', 'Export application latency and error rates', 'todo', 3, 12, 13, CURRENT_DATE + INTERVAL '7 days');
+(24, 'Build export to CSV feature', 'Stream large dataset exports without timeout', 'done', 4, 12, 12, CURRENT_DATE - INTERVAL '1 day'),
+(25, 'Setup Prometheus metrics', 'Export application latency and error rates', 'todo', 3, 12, 12, CURRENT_DATE + INTERVAL '7 days');
 
 
 -- ------------------------------------------------------------------
