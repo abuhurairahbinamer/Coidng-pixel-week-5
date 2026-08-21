@@ -53,7 +53,7 @@ SET assignee_id = 11
 WHERE assignee_id = 13;
 
 DELETE FROM project_members
-WHERE user_id = 13 AND project_id = 13;
+WHERE user_id = 13 AND project_id = 10;
 
 ROLLBACK;
 

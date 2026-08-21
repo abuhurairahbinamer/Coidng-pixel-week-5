@@ -21,3 +21,9 @@ This index can help Q5 in Assignment2 because the query filters tasks using
 `due_date < CURRENT_DATE`.
 
 It may also help queries that order or search tasks by due date.
+
+
+
+# C2
+
+![alt text](image-1.png)
